@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Planets Time</title>
+    <meta
+      name="description"
+      content="Find the times today when Earth's light matches noon on each planet."
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div id="sky" class="sky" aria-hidden="true"></div>
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="header-left">
+          <div class="branding">
+            <div class="logo" aria-hidden="true">☀️</div>
+            <h1><a class="brand-link" href="#">Planets Time</a></h1>
+          </div>
+          <nav class="top-tabs" aria-label="Primary">
+            <a class="tab-link" href="#how">How it works?</a>
+            <a class="tab-link" href="#about">About</a>
+            <a class="tab-link" href="#contact">Contact</a>
+          </nav>
+        </div>
+        <div class="header-actions" aria-label="Location controls">
+          <div class="country-picker">
+            <input
+              id="countrySearch"
+              type="search"
+              placeholder="Country"
+              aria-label="Country"
+            />
+            <div
+              id="countryDropdown"
+              class="country-dropdown hidden"
+              role="listbox"
+              aria-label="Country suggestions"
+            ></div>
+          </div>
+          <span id="locationText" class="hint" style="margin-left: 8px"></span>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="system-wrap">
+        <p class="lead-hint">
+          Tap a planet to see when Earth's light matches that world's noon.
+        </p>
+        <div id="system" class="system" style="--squeeze: 0.55">
+          <div class="stars" aria-hidden="true"></div>
+          <div class="streaks" aria-hidden="true"></div>
+          <div class="sun" aria-label="Sun"></div>
+          <div class="orbits" aria-hidden="false"></div>
+        </div>
+      </section>
+
+      <div id="infoOverlay" class="info-overlay hidden">
+        <div class="info-title"></div>
+        <div class="info-sub"></div>
+        <div class="info-time"></div>
+        <div class="info-place"></div>
+        <button class="info-close btn btn-secondary" type="button">
+          Close
+        </button>
+      </div>
+
+      <div id="panels">
+        <div id="panel-what" class="panel panel-always">
+          <h2 class="panel-title">What is “Planet time”?</h2>
+          <div class="panel-body">
+            <p>
+              “Planet time” is the moment when the Sun’s height above your
+              horizon matches the typical midday Sun elevation for a planet. Tap
+              a planet above to see when Earth’s light looks like that world’s
+              noon where you are.
+            </p>
+          </div>
+        </div>
+
+        <div id="panel-next" class="panel panel-requires-selection">
+          <h2 class="panel-title">
+            <span id="nextPanelTitle">Planet time is in…</span>
+          </h2>
+          <div class="panel-placeholder">
+            Select a planet to see the details.
+          </div>
+          <div class="panel-body">
+            <div id="nextPanelContent"></div>
+          </div>
+        </div>
+
+        <div id="panel-timeline" class="panel panel-requires-selection">
+          <h2 class="panel-title">
+            <span id="timelinePanelTitle">Planet light timeline</span>
+          </h2>
+          <div class="panel-placeholder">
+            Select a planet to see the details.
+          </div>
+          <div class="panel-body">
+            <ul class="timeline" id="timelineList" aria-live="polite">
+              <li>
+                <span class="tl-label" id="tlMorningLabel"
+                  >Morning Planet Time</span
+                >
+                <span class="tl-value" id="tlMorning">—</span>
+              </li>
+              <li>
+                <span class="tl-label">Sunrise</span>
+                <span class="tl-value" id="tlSunrise">—</span>
+              </li>
+              <li>
+                <span class="tl-label">Solar Noon</span>
+                <span class="tl-value" id="tlNoon">—</span>
+              </li>
+              <li>
+                <span class="tl-label">Sunset</span>
+                <span class="tl-value" id="tlSunset">—</span>
+              </li>
+              <li>
+                <span class="tl-label" id="tlEveningLabel"
+                  >Evening Planet Time</span
+                >
+                <span class="tl-value" id="tlEvening">—</span>
+              </li>
+              <li>
+                <span class="tl-label">Total Daylight</span>
+                <span class="tl-value" id="tlDaylight">—</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dedicated details dock (outside the system panel to avoid clipping) -->
+      <section
+        id="detailDock"
+        class="detail-dock hidden"
+        aria-live="polite"
+      ></section>
+
+      <!-- In-page sections -->
+      <section id="how" class="page-view" aria-label="How it works">
+        <div class="page-inner">
+          <h2>How Planets Time works</h2>
+          <p>
+            We compute the times when the Sun’s apparent altitude above your
+            horizon matches the light you’d get at noon on another world. It’s
+            anchored to the NASA Pluto Time convention (−1.5° apparent solar
+            altitude for Pluto) and generalized using inverse‑square irradiance
+            and an Earth illuminance model.
+          </p>
+        </div>
+      </section>
+
+      <section id="about" class="page-view" aria-label="About">
+        <div class="page-inner">
+          <h2>What is Planets Time?</h2>
+          <p>
+            A simple tool with a simple goal: show you when Earth’s light looks
+            like noon on other planets. Inspired by Pluto Time. Built by a
+            one‑man team and still in early stages. Expect rough edges and
+            please share feedback.
+          </p>
+        </div>
+      </section>
+
+      <section id="contact" class="page-view" aria-label="Contact">
+        <div class="page-inner">
+          <h2>Contact us</h2>
+          <p>
+            Feedback is super welcome—on accuracy, UX, features, or anything
+            else. Use the form below and we’ll get back to you.
+          </p>
+          <form id="contactForm" class="contact-form">
+            <label>
+              <span>Title</span>
+              <input type="text" name="title" required maxlength="120" />
+            </label>
+            <label>
+              <span>Email</span>
+              <input type="email" name="email" required />
+            </label>
+            <label>
+              <span>Message</span>
+              <textarea name="message" rows="5" required></textarea>
+            </label>
+            <div class="form-actions">
+              <button type="submit" class="btn">Send</button>
+              <span
+                id="contactStatus"
+                class="form-status"
+                aria-live="polite"
+              ></span>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span>Made with <span aria-hidden="true">✨</span> for space nerds.</span>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
